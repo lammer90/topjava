@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.ValidationUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class MealServiceImpl implements MealService {
     }
 
     @Override
-    public List<Meal> getAll(int userId) {
-        return new ArrayList<>(repository.getAll(userId));
+    public List<Meal> getAll(int userId, LocalDate ldStart, LocalDate ldEnd) {
+        return new ArrayList<>(repository.getAll(userId, ldStart, ldEnd));
     }
 }

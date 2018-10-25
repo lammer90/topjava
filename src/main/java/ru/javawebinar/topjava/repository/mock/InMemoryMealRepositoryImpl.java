@@ -5,11 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -22,7 +23,7 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     {
-        MealsUtil.MEALS.forEach(meal -> save(meal, SecurityUtil.authUserId()));
+        MealsUtil.MEALS.forEach(meal -> save(meal, 1));
     }
 
     @Override
@@ -61,9 +62,13 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     }
 
     @Override
-    public Collection<Meal> getAll(int userId) {
+    public Collection<Meal> getAll(int userId, LocalDate ldStart, LocalDate ldEnd) {
         log.info("getAll");
-        return repository.values().stream().filter(me -> me.getUserId() == userId).sorted(Comparator.comparing(Meal::getDate)).collect(Collectors.toList());
+        return repository.values().stream()
+                .filter(me -> me.getUserId() == userId)
+                .filter(s -> (ldStart == null || ldEnd == null) || DateTimeUtil.isBetween(s.getDate(), ldStart, ldEnd))
+                .sorted((m1, m2) -> -m1.getDate().compareTo(m2.getDate()))
+                .collect(Collectors.toList());
     }
 }
 

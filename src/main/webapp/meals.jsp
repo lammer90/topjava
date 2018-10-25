@@ -49,5 +49,30 @@
         </c:forEach>
     </table>
 </section>
+<form action="meals?action=allfilter" method="post">
+    <dl>
+        <dt>Date1:</dt>
+        <dd><input type="date" name="date1" required></dd>
+    </dl>
+    <dl>
+        <dt>Date2:</dt>
+        <dd><input type="date" name="date2" required></dd>
+    </dl>
+    <input type="submit" value="Отобрать по датам"></p>
+</form>
+<form action="meals?action=allfilter" method="post">
+    <dl>
+        <dt>Time1:</dt>
+        <dd><input type="time" name="time1" required></dd>
+    </dl>
+    <dl>
+        <dt>Time2:</dt>
+        <dd><input type="time" name="time2" required></dd>
+    </dl>
+    <input type="submit" value="Отобрать"></p>
+</form>
+<form action="meals?action=all" method="get">
+    <input type="submit" value="Сбросить отборы"></p>
+</form>
 </body>
 </html>
