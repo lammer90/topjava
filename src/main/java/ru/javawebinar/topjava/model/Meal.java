@@ -15,7 +15,7 @@ public class Meal extends AbstractBaseEntity {
 
     @Column(name = "date_time", nullable = false)
     @NotNull
-    @Convert(converter = PeriodPersistenceConverter.class)
+    //@Convert(converter = PeriodPersistenceConverter.class)
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)

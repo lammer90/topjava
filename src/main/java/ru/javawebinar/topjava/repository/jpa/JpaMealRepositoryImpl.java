@@ -22,9 +22,9 @@ public class JpaMealRepositoryImpl implements MealRepository {
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
-        User userRef = em.getReference(User.class, userId);
-        meal.setUser(userRef);
         if (meal.isNew()) {
+            User userRef = em.getReference(User.class, userId);
+            meal.setUser(userRef);
             em.persist(meal);
             return meal;
         } else {
@@ -49,7 +49,7 @@ public class JpaMealRepositoryImpl implements MealRepository {
 
     @Override
     public List<Meal> getAll(int userId) {
-        return em.createQuery("SELECT m FROM Meal m WHERE m.user.id=:userId", Meal.class)
+        return em.createQuery("SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC", Meal.class)
                 .setParameter("userId", userId).getResultList();
     }
 
