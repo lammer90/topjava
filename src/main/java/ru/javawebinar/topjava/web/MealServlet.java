@@ -1,7 +1,10 @@
 package ru.javawebinar.topjava.web;
 
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.web.meal.MealRestController;
 
@@ -28,8 +31,16 @@ public class MealServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        springContext = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
-        mealController = springContext.getBean(MealRestController.class);
+
+        GenericXmlApplicationContext ctx = new GenericXmlApplicationContext ();
+        ConfigurableEnvironment env = ctx.getEnvironment();
+        env.setActiveProfiles ( "postgres", "datajpa");
+        ctx.load ( "spring/spring-app.xml", "spring/spring-db.xml");
+        ctx.refresh ();
+
+       /* AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("spring/spring-app.xml", "spring/spring-db.xml");
+        context.getEnvironment().setActiveProfiles("postgres", "datajpa");*/
+        mealController = ctx.getBean(MealRestController.class);
     }
 
     @Override
