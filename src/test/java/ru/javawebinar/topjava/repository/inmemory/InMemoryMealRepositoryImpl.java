@@ -26,6 +26,11 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
     private AtomicInteger counter = new AtomicInteger(0);
 
     @Override
+    public Meal getWithUser(int id, int userId) {
+        return null;
+    }
+
+    @Override
     public Meal save(Meal meal, int userId) {
         Objects.requireNonNull(meal, "meal must not be null");
         var meals = repository.computeIfAbsent(userId, ConcurrentHashMap::new);

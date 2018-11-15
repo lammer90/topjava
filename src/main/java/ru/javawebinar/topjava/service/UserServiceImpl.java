@@ -24,6 +24,11 @@ public class UserServiceImpl implements UserService {
         this.repository = repository;
     }
 
+    @Override
+    public User getWithMeal(int id) throws NotFoundException {
+        return repository.getWithMeal(id);
+    }
+
     @CacheEvict(value = "users", allEntries = true)
     @Override
     public User create(User user) {

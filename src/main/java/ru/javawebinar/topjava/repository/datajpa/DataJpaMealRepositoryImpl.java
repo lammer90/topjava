@@ -19,6 +19,12 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     private CrudUserRepository crudUserRepository;
 
     @Override
+    public Meal getWithUser(int id, int userId) {
+        Meal meal = crudMealRepository.getWihtUser(id, userId).stream().findFirst().orElse(null);
+        return meal != null && meal.getUser().getId() == userId ? meal : null;
+    }
+
+    @Override
     public Meal save(Meal meal, int userId) {
         if (!meal.isNew() && get(meal.getId(), userId) == null) {
             return null;
@@ -30,12 +36,14 @@ public class DataJpaMealRepositoryImpl implements MealRepository {
     @Override
     public boolean delete(int id, int userId) {
         return crudMealRepository.deleteById(id, userId) != 0;
+        //return crudMealRepository.deleteByIdAndUser_Id(id, userId) != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        Meal meal = crudMealRepository.findById(id).orElse(null);
-        return meal != null && meal.getUser().getId() == userId ? meal : null;
+        /*Meal meal = crudMealRepository.findById(id).orElse(null);
+        return meal != null && meal.getUser().getId() == userId ? meal : null;*/
+        return crudMealRepository.getByIdAndUser_Id(id, userId);
     }
 
     @Override

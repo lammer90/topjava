@@ -35,6 +35,11 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getWithMeal(int id) {
+        return null;
+    }
+
+    @Override
     public User save(User user) {
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
 

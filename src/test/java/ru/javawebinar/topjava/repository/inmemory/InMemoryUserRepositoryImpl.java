@@ -29,6 +29,11 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getWithMeal(int id) {
+        return null;
+    }
+
+    @Override
     public User save(User user) {
         Objects.requireNonNull(user, "user must not be null");
         if (user.isNew()) {
