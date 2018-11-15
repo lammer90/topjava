@@ -68,9 +68,9 @@
         </bean>
     </beans>
 
-    <beans profile="jdbc">
+    <beans profile="jdbchsqldb, jdbcpostgres">
 
-        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
+        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc.jdbcuserrepository"/>
 
         <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
             <constructor-arg ref="dataSource"/>
@@ -81,6 +81,15 @@
         </bean>
 
     </beans>
+
+    <beans profile="jdbchsqldb">
+        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc.jdbchsqldb"/>
+    </beans>
+
+    <beans profile="jdbcpostgres">
+        <context:component-scan base-package="ru.javawebinar.**.repository.jdbc.jdbcpostgres"/>
+    </beans>
+
     <beans profile="jpa">
 
         <context:component-scan base-package="ru.javawebinar.**.repository.jpa"/>
