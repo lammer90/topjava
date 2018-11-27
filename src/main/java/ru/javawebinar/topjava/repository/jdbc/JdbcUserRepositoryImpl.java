@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -7,14 +9,21 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import java.util.List;
 
 @Repository
+@Transactional(readOnly = true)
 public class JdbcUserRepositoryImpl implements UserRepository {
+
+    private static final Logger log = LoggerFactory.getLogger(JdbcUserRepositoryImpl.class);
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 
@@ -35,8 +44,11 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional
     public User save(User user) {
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
+
+        log.debug("Transaction active:::: {}", TransactionSynchronizationManager.isActualTransactionActive());
 
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
@@ -50,6 +62,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional
     public boolean delete(int id) {
         return jdbcTemplate.update("DELETE FROM users WHERE id=?", id) != 0;
     }
