@@ -8,13 +8,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.DateTimeUtil;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
+import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
+import static ru.javawebinar.topjava.util.Util.orElse;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 
 @Controller
@@ -45,6 +51,26 @@ public class JspMealController {
             mealService.update(meal, SecurityUtil.authUserId());
         }
         return "redirect:meals";
+    }
+
+    @PostMapping("/filter")
+    public String filter(Model model, HttpServletRequest request) {
+        LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
+        LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
+        LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
+        LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
+
+        int userId = SecurityUtil.authUserId();
+
+        List<Meal> mealsDateFiltered = mealService.getBetweenDates(
+                orElse(startDate, DateTimeUtil.MIN_DATE), orElse(endDate, DateTimeUtil.MAX_DATE), userId);
+
+        List<MealTo> mealTos = MealsUtil.getFilteredWithExcess(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(),
+                orElse(startTime, LocalTime.MIN), orElse(endTime, LocalTime.MAX)
+        );
+
+        model.addAttribute("meals", mealTos);
+        return "meals";
     }
 
     @GetMapping("/create")
