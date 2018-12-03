@@ -127,7 +127,7 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     @Override
     public User getByEmail(String email) {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
-        List<User> users = jdbcTemplate.query("SELECT * FROM users LEFT JOIN user_roles r ON users.id = r.user_id WHERE email=?", ROW_MAPPER, email);
+        List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         User user = DataAccessUtils.singleResult(users);
 
         SqlRowSet sqlRowSet = jdbcTemplate.queryForRowSet("SELECT * FROM user_roles WHERE user_id=?", user.getId());
