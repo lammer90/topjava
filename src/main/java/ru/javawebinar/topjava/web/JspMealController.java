@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
@@ -24,20 +25,21 @@ import static ru.javawebinar.topjava.util.Util.orElse;
 import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 
 @Controller
+@RequestMapping("/meals")
 public class JspMealController {
 
     @Autowired
     private MealService mealService;
 
 
-    @GetMapping("/meals")
+    @GetMapping
     public String meals(Model model) {
         List<MealTo> mealTo = MealsUtil.getWithExcess(mealService.getAll(SecurityUtil.authUserId()), SecurityUtil.authUserCaloriesPerDay());
         model.addAttribute("meals", mealTo);
         return "meals";
     }
 
-    @PostMapping("/meals")
+    @PostMapping
     public String saveMeal(Model model, HttpServletRequest request) {
         Meal meal = new Meal(
                 LocalDateTime.parse(request.getParameter("dateTime")),
@@ -50,7 +52,7 @@ public class JspMealController {
             assureIdConsistent(meal, Integer.parseInt(request.getParameter("id")));
             mealService.update(meal, SecurityUtil.authUserId());
         }
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 
     @PostMapping("/filter")
