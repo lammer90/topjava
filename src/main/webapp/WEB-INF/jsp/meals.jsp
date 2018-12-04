@@ -4,11 +4,7 @@
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
 <html>
 <head>
-    <title>Calories management</title>
-    <link rel="stylesheet" href="css/style.css">
-
-    <%--https://stackoverflow.com/questions/4764405/how-to-use-relative-paths-without-including-the-context-root-name--%>
-    <base href="/meals">
+    <jsp:include page="fragments/headTag.jsp"/>
 </head>
 <body>
 <section>
@@ -33,7 +29,7 @@
         <button type="submit">Filter</button>
     </form>
     <hr/>
-    <a href="/meals/create">Add Meal</a>
+    <a href="meals/create">Add Meal</a>
     <hr/>
     <table border="1" cellpadding="8" cellspacing="0">
         <thead>
@@ -56,8 +52,8 @@
                 </td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="/meals/update?id=${meal.id}">Update</a></td>
-                <td><a href="/meals/delete?id=${meal.id}">Delete</a></td>
+                <td><a href="meals/update?id=${meal.id}">Update</a></td>
+                <td><a href="meals/delete?id=${meal.id}">Delete</a></td>
             </tr>
         </c:forEach>
     </table>

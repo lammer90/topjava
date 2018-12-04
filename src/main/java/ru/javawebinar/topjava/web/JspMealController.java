@@ -92,6 +92,6 @@ public class JspMealController {
     public String delete(HttpServletRequest request) {
         int id = Integer.valueOf(request.getParameter("id"));
         mealService.delete(id, SecurityUtil.authUserId());
-        return "redirect:meals";
+        return "redirect:/meals";
     }
 }

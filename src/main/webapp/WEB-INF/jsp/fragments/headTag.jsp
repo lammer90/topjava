@@ -6,4 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title><spring:message code="app.title"/></title>
     <link rel="stylesheet" href="resources/css/style.css">
+
+    <%--https://stackoverflow.com/questions/4764405/how-to-use-relative-paths-without-including-the-context-root-name--%>
+    <base href="/topjava/"/>
 </head>
