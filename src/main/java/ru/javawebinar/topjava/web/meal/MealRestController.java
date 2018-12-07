@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.data.convert.ReadingConverter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -56,13 +57,13 @@ public class MealRestController extends AbstractMealController {
         super.update(meal, id);
     }
 
-    /*for example: http://localhost:8081/topjava/rest/meals/2015-05-31/2015-05-31T20:00:00/2015-05-31/2015-05-31T20:00:00*/
+    /*for example: http://localhost:8081/topjava/rest/meals/filter?startDate=2015-05-31&startTime=20:00:00&endDate=2015-05-31&endTime=20:00:00*/
     @Override
-    @GetMapping(value = "/{startDate}/{startTime}/{endDate}/{endTime}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<MealTo> getBetween(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                   @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalTime startTime,
-                                   @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                   @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalTime endTime) {
+    @GetMapping(value = "/filter")
+    public List<MealTo> getBetween(@RequestParam(value = "startDate", required = false) LocalDate startDate,
+                                   @RequestParam(value = "startTime", required = false) LocalTime startTime,
+                                   @RequestParam(value = "endDate"  , required = false) LocalDate endDate,
+                                   @RequestParam(value = "endTime"  , required = false) LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
 }
