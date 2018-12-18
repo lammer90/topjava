@@ -31,11 +31,11 @@ public class UserTestData {
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "meals").isEqualTo(expected);
     }
 
-    public static ResultMatcher contentJson(User... expected) {
+    public static <T> ResultMatcher contentJson(T... expected) {
         return content().json(writeIgnoreProps(List.of(expected), "registered"));
     }
 
-    public static ResultMatcher contentJson(User expected) {
+    public static <T> ResultMatcher contentJson(T expected) {
         return content().json(writeIgnoreProps(expected, "registered"));
     }
 }
