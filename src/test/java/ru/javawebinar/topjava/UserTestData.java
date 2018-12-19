@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static ru.javawebinar.topjava.TestUtil.readFromJsonMvcResult;
+import static ru.javawebinar.topjava.TestUtil.readListFromJsonMvcResult;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
-import static ru.javawebinar.topjava.web.json.JsonUtil.writeIgnoreProps;
 
 public class UserTestData {
     public static final int USER_ID = START_SEQ;
@@ -31,11 +31,11 @@ public class UserTestData {
         assertThat(actual).usingElementComparatorIgnoringFields("registered", "meals").isEqualTo(expected);
     }
 
-    public static ResultMatcher contentJson(User... expected) {
-        return content().json(writeIgnoreProps(List.of(expected), "registered"));
+    public static ResultMatcher getUserMatcher(User... expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, User.class), List.of(expected));
     }
 
-    public static ResultMatcher contentJson(User expected) {
-        return content().json(writeIgnoreProps(expected, "registered"));
+    public static ResultMatcher getUserMatcher(User expected) {
+        return result -> assertMatch(readFromJsonMvcResult(result, User.class), expected);
     }
 }
