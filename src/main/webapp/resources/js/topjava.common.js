@@ -1,3 +1,5 @@
+let filterOn = false;
+
 function makeEditable() {
     /*$(".delete").click(function () {
         deleteRow($(this).attr("id"));
@@ -47,6 +49,18 @@ function updateTable() {
     });
 }
 
+function updateTableWithFilter() {
+    let form = $("#filterForm");
+    $.ajax({
+        type: "POST",
+        url: ajaxUrlMeal + "filter",
+        data: form.serialize()
+    }).done(function (data) {
+        datatableMealApi.clear().rows.add(data).draw();
+        successNoty("Saved");
+    });
+}
+
 function updateTableMeal() {
     $.get(ajaxUrlMeal, function (data) {
         datatableMealApi.clear().rows.add(data).draw();
@@ -74,9 +88,36 @@ function saveMeal() {
         data: form.serialize()
     }).done(function () {
         $("#editMeal").modal("hide");
-        updateTableMeal();
+        if (filterOn) {
+            updateTableWithFilter()
+        }
+        else {
+            updateTableMeal();
+        }
+
         successNoty("Saved");
     });
+}
+
+function cUser(id) {
+    $.ajax({
+        type: "POST",
+        url: ajaxUrl + id
+    }).done(function () {
+        updateTable();
+        successNoty("Saved");
+    });
+}
+
+function filter() {
+    filterOn = true;
+    updateTableWithFilter();
+}
+
+function dropFilter() {
+    filterOn = false;
+    document.getElementById("filterForm").reset();
+    updateTableMeal();
 }
 
 let failedNote;

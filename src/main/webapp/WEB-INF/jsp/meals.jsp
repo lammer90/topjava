@@ -38,6 +38,10 @@
                 <span class="fa fa-check"></span>
                 <spring:message code="meal.filter"/>
             </button>
+            <button type="button" class="btn btn-primary" onclick="dropFilter()">
+                <span class="fa fa-check"></span>
+                <spring:message code="meal.dropFilter"/>
+            </button>
         </form>
         <hr>
         <button type="button" class="btn btn-primary" onclick="addMeal()">
