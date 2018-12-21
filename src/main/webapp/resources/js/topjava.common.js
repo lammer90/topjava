@@ -1,7 +1,7 @@
 function makeEditable() {
-    $(".delete").click(function () {
+    /*$(".delete").click(function () {
         deleteRow($(this).attr("id"));
-    });
+    });*/
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
@@ -16,6 +16,11 @@ function add() {
     $("#editRow").modal();
 }
 
+function addMeal() {
+    $("#detailsMeal").find(":input").val("");
+    $("#editMeal").modal();
+}
+
 function deleteRow(id) {
     $.ajax({
         url: ajaxUrl + id,
@@ -26,9 +31,25 @@ function deleteRow(id) {
     });
 }
 
+function deleteMeal(id) {
+    $.ajax({
+        url: ajaxUrlMeal + id,
+        type: "DELETE"
+    }).done(function () {
+        updateTableMeal();
+        successNoty("Deleted");
+    });
+}
+
 function updateTable() {
     $.get(ajaxUrl, function (data) {
         datatableApi.clear().rows.add(data).draw();
+    });
+}
+
+function updateTableMeal() {
+    $.get(ajaxUrlMeal, function (data) {
+        datatableMealApi.clear().rows.add(data).draw();
     });
 }
 
@@ -41,6 +62,19 @@ function save() {
     }).done(function () {
         $("#editRow").modal("hide");
         updateTable();
+        successNoty("Saved");
+    });
+}
+
+function saveMeal() {
+    let form = $("#detailsMeal");
+    $.ajax({
+        type: "POST",
+        url: ajaxUrlMeal,
+        data: form.serialize()
+    }).done(function () {
+        $("#editMeal").modal("hide");
+        updateTableMeal();
         successNoty("Saved");
     });
 }
